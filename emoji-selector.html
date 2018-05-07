@@ -343,11 +343,9 @@ the category tabs.
       var value = '';
       if (this.inputTarget.value)
         value = this.inputTarget.value;
-      console.log(value);
 
       // Carets are witchcraft.
       var newValue = this._updateValueAndPreserveCaret(value, emoji);
-      console.log(newValue);
 
       // This is a bit of a hack, but an iron-input or iron-autogrow-textarea
       // need to get notified to update their `bind-value`. And `onInput`
@@ -415,7 +413,6 @@ the category tabs.
       // Preserve the cursor position. If this is a paper-input, we really
       // care about the cursor position of the underlying iron-input.
       var underlyingIronInput = this.inputTarget.inputElement;
-      console.log(underlyingIronInput);
 
       var start, end;
 
