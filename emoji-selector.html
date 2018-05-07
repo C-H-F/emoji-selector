@@ -1,4 +1,5 @@
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../neon-animation/web-animations.html">
 <link rel="import" href="../paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
@@ -21,7 +22,7 @@ search-for-emoji-keywords feature!
 Example:
 
     <paper-input label="needs moar emoji">
-      <emoji-selector suffix></emoji-selector>
+      <emoji-selector slot="suffix"></emoji-selector>
     </paper-input>
 
 ### Styling
@@ -42,8 +43,8 @@ the category tabs.
 
 -->
 
-</style>
 <dom-module id="emoji-selector">
+    <template>
   <style>
     :host {
       display: inline-block;
@@ -83,7 +84,7 @@ the category tabs.
       height: 240px;
       font-size: 15px;
 
-      @apply(--emoji-selector);
+      @apply --emoji-selector;
     }
 
     .section-title {
@@ -119,13 +120,13 @@ the category tabs.
     	-ms-transition: all .14s linear;
     	transition: all .14s linear;
 
-      @apply(--emoji-selector-icon);
+      @apply --emoji-selector-icon;
     }
 
     .emoji-icon:hover {
       transform: scale(1.3, 1.3);
       -webkit-transform: scale(1.3, 1.3);
-      @apply(--emoji-selector-icon-hover);
+      @apply --emoji-selector-icon-hover;
     }
 
     paper-icon-button.clear-button {
@@ -137,20 +138,19 @@ the category tabs.
     }
   </style>
 
-  <template>
     <iron-media-query query="(max-width: 375px)" query-matches="{{smallScreen}}"></iron-media-query>
 
     <paper-menu-button id="menu"
         vertical-align="top" vertical-offset="40"
         horizontal-align="[[_computeHorizontalAlign(smallScreen)]]"
         ignore-select>
-      <paper-icon-button icon="face" class="dropdown-trigger"></paper-icon-button>
-      <paper-menu class="dropdown-content">
+      <paper-icon-button icon="face" slot="dropdown-trigger"></paper-icon-button>
+      <paper-menu slot="dropdown-content">
         <div class="box">
           <paper-input autofocus no-label-float id="searchInput" placeholder="find an emoji!"
             on-input="_onSearchInput">
-            <paper-icon-button suffix on-tap="_onClearSearchInput" id="clearSearch" class="clear-button hide"
-                icon="clear" alt="clear" title="clear" tabindex="0" hidden>
+            <paper-icon-button on-tap="_onClearSearchInput" id="clearSearch" class="clear-button hide"
+                icon="clear" alt="clear" title="clear" tabindex="0" slot="suffix" hidden>
             </paper-icon-button>
           </paper-input>
 
@@ -196,64 +196,67 @@ the category tabs.
 </dom-module>
 
 <script>
-  Polymer({
+  class EmojiSelector extends Polymer.Element {
+    static get is() { return 'emoji-selector'; }
 
-    is: 'emoji-selector',
+    static get properties() {
+      return {
+        /**
+        * The input element the emojis should be inserted to. If not specified,
+        * and the emoji-selector is used as a ``<paper-input>`` suffix element, then
+        * `inputTarget` will be this parent `paper-input` element.
+        */
+        inputTarget: {
+          type: Object
+        },
 
-    properties: {
-      /**
-       * The input element the emojis should be inserted to. If not specified,
-       * and the emoji-selector is used as a ``<paper-input>`` suffix element, then
-       * `inputTarget` will be this parent `paper-input` element.
-       */
-      inputTarget: {
-        type: Object
-      },
+        /**
+        * The selected category.
+        */
+        selected: {
+          type: Number,
+          value: 0
+        },
 
-      /**
-       * The selected category.
-       */
-      selected: {
-        type: Number,
-        value: 0
-      },
+        /**
+        * A list of all emojis, split by category.
+        */
+        emojis: {
+          type: Array,
+          value: []
+        },
 
-      /**
-       * A list of all emojis, split by category.
-       */
-      emojis: {
-        type: Array,
-        value: []
-      },
+        /**
+        * A sorted list of all recently used emoji.
+        */
+        recentlyUsedEmojis: {
+          type: Array,
+          value: []
+        },
 
-      /**
-       * A sorted list of all recently used emoji.
-       */
-      recentlyUsedEmojis: {
-        type: Array,
-        value: []
-      },
+        /**
+        * A list of the emojis matching the search.
+        */
+        searchResults: {
+          type: Array,
+          value: []
+        },
 
-      /**
-       * A list of the emojis matching the search.
-       */
-      searchResults: {
-        type: Array,
-        value: []
-      },
-
-      smallScreen: {
-        type: Boolean,
-        value: false
+        smallScreen: {
+          type: Boolean,
+          value: false
+        }
       }
-    },
+    }
 
-    ready: function() {
-      this.inputTarget = Polymer.dom(this).parentNode;
+    ready() {
+      this.inputTarget = this.parentNode;
       this._selectedTabBeforeSearch = 1;
-    },
+      super.ready();
+    }
 
-    attached: function() {
+    connectedCallback() {
+      super.connectedCallback();
       this._hasLocalStorage = this._checkLocalStorage();
       // Restore recently used emoji.
       if (this._hasLocalStorage) {
@@ -266,12 +269,12 @@ the category tabs.
       }
 
       this._loadEmojiLib();
-    },
+    }
 
     /**
      * Load and parse the emojis into something we can use.
      */
-    _loadEmojiLib: function() {
+    _loadEmojiLib() {
       var request = new XMLHttpRequest();
       var url = this.resolveUrl('../emojilib/emojis.json');
       request.open('GET', url, true);
@@ -283,24 +286,24 @@ the category tabs.
         }
       };
       request.send();
-    },
+    }
 
-    _parseEmojiLib: function(emojis) {
+    _parseEmojiLib(emojis) {
       this.emojis = [{ 'name': 'people',  'items' : [ ], title : 'people' },
-                  { 'name': 'nature',  'items' : [ ], title : 'nature' },
-                  { 'name': 'foodanddrink',  'items' : [ ], title : 'food and drink' },
-                  { 'name': 'celebration',  'items' : [ ], title : 'celebration' },
+                  { 'name': 'animals_and_nature',  'items' : [ ], title : 'animals and nature' },
+                  { 'name': 'food_and_drink',  'items' : [ ], title : 'food and drink' },
+                  { 'name': 'objects',  'items' : [ ], title : 'objects' },
                   { 'name': 'activity',  'items' : [ ], title : 'activity' },
-                  { 'name': 'travelandplaces', 'items' : [ ], title : 'travel and places' },
-                  { 'name': 'objectsandsymbols', 'items' : [ ], title : 'objects and symbols' },
+                  { 'name': 'travel_and_places', 'items' : [ ], title : 'travel and places' },
+                  { 'name': 'symbols', 'items' : [ ], title : 'symbols' },
                   { 'name': 'flags', 'items' : [ ], title : 'flags' }];
       var indexes = { 'people' : 0,
-                      'nature' : 1,
-                      'foodanddrink' : 2,
-                      'celebration': 3,
+                      'animals_and_nature' : 1,
+                      'food_and_drink' : 2,
+                      'objects': 3,
                       'activity' : 4,
-                      'travelandplaces': 5,
-                      'objectsandsymbols': 6,
+                      'travel_and_places': 5,
+                      'symbols': 6,
                       'flags': 7,
                     };
       this._searchPageIndex = 9;  // the page after the last legit emoji page.
@@ -320,9 +323,9 @@ the category tabs.
       }
 
       this.selected = this.recentlyUsedEmojis.length == 0 ? 1 : 0;
-    },
+    }
 
-    _onEmojiClick: function(event) {
+    _onEmojiClick(event) {
       if (!this.inputTarget)
         return;
       var emoji = event.target.textContent;
@@ -340,9 +343,11 @@ the category tabs.
       var value = '';
       if (this.inputTarget.value)
         value = this.inputTarget.value;
+      console.log(value);
 
       // Carets are witchcraft.
       var newValue = this._updateValueAndPreserveCaret(value, emoji);
+      console.log(newValue);
 
       // This is a bit of a hack, but an iron-input or iron-autogrow-textarea
       // need to get notified to update their `bind-value`. And `onInput`
@@ -355,12 +360,12 @@ the category tabs.
 
       // Close the box.
       this._closeMenu();
-    },
+    }
 
-    _onSearchInput: function(event) {
+    _onSearchInput(event) {
       var search = this.$.searchInput.value.toLowerCase();
       if (search.trim() == '' && this.selected == this._searchPageIndex) {
-        this.clearSearch.hidden = true;
+        this.$.clearSearch.hidden = true;
         this.selected = this._selectedTabBeforeSearch;
         return;
       }
@@ -387,15 +392,15 @@ the category tabs.
           }
         }
       }
-    },
+    }
 
-    _onClearSearchInput: function() {
+    _onClearSearchInput() {
       this.$.clearSearch.hidden = true;
       this.$.searchInput.value = '';
       this.selected = this._selectedTabBeforeSearch;
-    },
+    }
 
-    _closeMenu: function() {
+    _closeMenu() {
       this.$.searchInput.focus();
       if (this.selected != this._searchPageIndex) {
         this.$.searchInput.value = '';
@@ -404,18 +409,19 @@ the category tabs.
 
       this.$.menu.close();
       this.$.tabs.notifyResize();
-    },
+    }
 
-    _updateValueAndPreserveCaret: function(value, emoji) {
+    _updateValueAndPreserveCaret(value, emoji) {
       // Preserve the cursor position. If this is a paper-input, we really
       // care about the cursor position of the underlying iron-input.
       var underlyingIronInput = this.inputTarget.inputElement;
+      console.log(underlyingIronInput);
 
       var start, end;
 
       if (underlyingIronInput) {
-        start = underlyingIronInput.selectionStart || value.length;
-        end = underlyingIronInput.selectionEnd || value.length + 1;
+        start = underlyingIronInput.inputElement.selectionStart || value.length;
+        end = underlyingIronInput.inputElement.selectionEnd || value.length + 1;
       } else {
         start = this.inputTarget.selectionStart || value.length;
         end = this.inputTarget.selectionEnd || value.length + 1;
@@ -437,13 +443,13 @@ the category tabs.
       }
 
       return newValue;
-    },
+    }
 
-    _computeHorizontalAlign: function(smallScreen) {
+    _computeHorizontalAlign(smallScreen) {
       return smallScreen ? 'right': 'left';
-    },
+    }
 
-    _checkLocalStorage: function() {
+    _checkLocalStorage() {
       var mod = '__emoji_test_local_storage__';
       try {
         localStorage.setItem(mod, 'a');
@@ -453,6 +459,6 @@ the category tabs.
         return false;
       };
     }
-  });
-
+  }
+  customElements.define(EmojiSelector.is, EmojiSelector);
 </script>

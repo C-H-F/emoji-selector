@@ -1,6 +1,6 @@
 {
   "name": "emoji-selector",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A polymer element that adds an emoji selector button to a paper-input",
   "main": "emoji-selector.html",
   "author": [
@@ -22,20 +22,24 @@
     "bower_components"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
-    "paper-styles": "PolymerElements/paper-styles#^1.0.0",
-    "paper-input": "PolymerElements/paper-input#^1.0.0",
-    "paper-menu-button": "PolymerElements/paper-menu-button#^1.0.0",
-    "iron-icon": "PolymerElements/iron-icon#^1.0.0",
-    "paper-tabs": "PolymerElements/paper-tabs#^1.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^1.0.0",
-    "iron-media-query": "PolymerElements/iron-media-query#^1.0.0",
-    "emojilib": "~1.0.0"
+    "polymer": "Polymer/polymer#^2.0.0",
+    "web-animations-js": "web-animations/web-animations-js#^2.2.0",
+    "paper-styles": "PolymerElements/paper-styles#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.0",
+    "paper-menu-button": "PolymerElements/paper-menu-button#^2.0.0",
+    "iron-icon": "PolymerElements/iron-icon#^2.0.0",
+    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
+    "iron-pages": "PolymerElements/iron-pages#^2.0.0",
+    "iron-media-query": "PolymerElements/iron-media-query#^2.0.0",
+    "emojilib": "~2.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^3.0.0",
+    "test-fixture": "PolymerElements/test-fixture#^3.0.0",
     "web-component-tester": "*",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "iron-doc-viewer": "^3.0.0"
   }
 }
