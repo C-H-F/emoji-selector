@@ -35,7 +35,6 @@ the category tabs.
 */
 import { PolymerElement } from '../@polymer/polymer/polymer-element.js';
 
-import '../@polymer/neon-animation/web-animations.js';
 import '../@polymer/paper-menu-button/paper-menu-button.js';
 import '../@polymer/paper-tabs/paper-tabs.js';
 import '../@polymer/paper-icon-button/paper-icon-button.js';
