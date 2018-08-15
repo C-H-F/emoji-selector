@@ -8,13 +8,13 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../paper-styles/demo-pages.html">
-  <link rel="import" href="../../paper-input/paper-input.html">
-  <link rel="import" href="../../paper-input/paper-input-container.html">
-  <link rel="import" href="../../iron-autogrow-textarea/iron-autogrow-textarea.html">
-  <link rel="import" href="../../paper-styles/color.html">
-  <link rel="import" href="../emoji-selector.html">
+  <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="../../@polymer/paper-styles/demo-pages.js"></script>
+  <script type="module" src="../../@polymer/paper-input/paper-input.js"></script>
+  <script type="module" src="../../@polymer/paper-input/paper-input-container.js"></script>
+  <script type="module" src="../../@polymer/iron-autogrow-textarea/iron-autogrow-textarea.js"></script>
+  <script type="module" src="../../@polymer/paper-styles/color.js"></script>
+  <script type="module" src="../emoji-selector.js"></script>
 
   <custom-style>
     <style is="custom-style">
@@ -60,8 +60,14 @@
   </paper-input-container>
 </body>
 
-<script>
-  // Elements that aren't paper-inputs need to be manually wired up.
-  document.getElementById('s1').inputTarget = document.getElementById('a1');
+<script type="module">
+import '../../@polymer/paper-styles/demo-pages.js';
+import '../../@polymer/paper-input/paper-input.js';
+import '../../@polymer/paper-input/paper-input-container.js';
+import '../../@polymer/iron-autogrow-textarea/iron-autogrow-textarea.js';
+import '../../@polymer/paper-styles/color.js';
+import '../emoji-selector.js';
+// Elements that aren't paper-inputs need to be manually wired up.
+document.getElementById('s1').inputTarget = document.getElementById('a1');
 </script>
 </html>
