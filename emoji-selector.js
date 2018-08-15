@@ -47,7 +47,7 @@ import '../@polymer/paper-input/paper-input.js';
 import '../@polymer/paper-styles/default-theme.js';
 import '../@polymer/iron-media-query/iron-media-query.js';
 
-import "emojilib/index.js"
+import "../emojilib/index.js"
 
 import { html } from '../@polymer/polymer/lib/utils/html-tag.js';
 class EmojiSelector extends PolymerElement {
