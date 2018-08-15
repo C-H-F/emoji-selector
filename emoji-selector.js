@@ -46,6 +46,9 @@ import '../@polymer/iron-icons/maps-icons.js';
 import '../@polymer/paper-input/paper-input.js';
 import '../@polymer/paper-styles/default-theme.js';
 import '../@polymer/iron-media-query/iron-media-query.js';
+
+import "emojilib/index.js"
+
 import { html } from '../@polymer/polymer/lib/utils/html-tag.js';
 class EmojiSelector extends PolymerElement {
   static get template() {
@@ -264,24 +267,15 @@ class EmojiSelector extends PolymerElement {
       this.recentlyUsedEmojis = [];
     }
 
-    this._loadEmojiLib();
+    this._loadEmojiES6();
   }
 
   /**
    * Load and parse the emojis into something we can use.
    */
-  _loadEmojiLib() {
-    var request = new XMLHttpRequest();
-    var url = this.resolveUrl('../emojilib/emojis.json');
-    request.open('GET', url, true);
-    var self = this;
 
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) {
-        self._parseEmojiLib(JSON.parse(request.response));
-      }
-    };
-    request.send();
+  _loadEmojiES6(){
+    self.parseEmojiLib(emoji.lib)
   }
 
   _parseEmojiLib(emojis) {
